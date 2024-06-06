@@ -12,8 +12,7 @@ document.getElementById('customer-form').addEventListener('submit', async functi
         phone: phone,
         address: address
     };
-
-    
+  
 
     try {
         const response = await fetch('https://offering.pockethost.io/api/collections/Water/records', {
