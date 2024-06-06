@@ -1,21 +1,39 @@
-let userData = {
-    June: {
-        id: "",
-        name: "",
-        phoneNumber: "",
-        meterNumber: "",
-        waterConsumption: ""
-    }
-};
-
-document.getElementById('userDataForm').addEventListener('submit', function(event) {
+document.getElementById('customer-form').addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    userData.June.id = document.getElementById('idNumber').value;
-    userData.June.name = document.getElementById('name').value;
-    userData.June.phoneNumber = document.getElementById('phoneNumber').value;
-    userData.June.meterNumber = document.getElementById('meterNumber').value;
-    userData.June.waterConsumption = document.getElementById('waterConsumption').value;
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
 
-    console.log(userData);
+    const customerData = {
+        name: name,
+        email: email,
+        phone: phone,
+        address: address
+    };
+
+    
+
+    try {
+        const response = await fetch('https://offering.pockethost.io/api/collections/Water/records', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(customerData)
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert('Customer added successfully!');
+            document.getElementById('customer-form').reset();
+        } else {
+            const error = await response.json();
+            alert(`Error: ${error.message}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to add customer. Please try again.');
+    }
 });
